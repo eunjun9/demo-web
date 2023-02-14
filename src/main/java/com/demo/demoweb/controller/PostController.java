@@ -1,6 +1,8 @@
 package com.demo.demoweb.controller;
 
 import com.demo.demoweb.request.PostRequest;
+import com.demo.demoweb.service.PostService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -13,7 +15,10 @@ import java.util.Map;
 
 @Slf4j
 @RestController // JSON으로 통신할 때 사용 (Controller + ResponseBody)
+@RequiredArgsConstructor
 public class PostController {
+
+    private final PostService postService;
 
     // Http Method
     // GET, POST, PUT, PATCH, DELETE, OPTIONS, HEAD, TRACE, CONNECT
@@ -27,7 +32,7 @@ public class PostController {
 
     // 글 등록
     @PostMapping("/posts")
-    public Map<String, String> post(@RequestBody @Valid PostRequest params) /*throws Exception*/ {
+    public Map<String, String> post(@RequestBody @Valid PostRequest param) /*throws Exception*/ {
         // 데이터를 검증하는 이유
         // 1. client 개발자가 깜빡할 수 있다. 실수로 값을 안 보낼 수 있다.
         // 2. client bug로 값이 누락될 수 있다.
@@ -68,6 +73,7 @@ public class PostController {
             return error;
         } */
 
+        postService.write(param);
         return Map.of();
         // return params.getTitle() + ", " + params.getContent();
     }
